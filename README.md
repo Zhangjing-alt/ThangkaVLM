@@ -97,7 +97,6 @@ ThangkaVLM/
 ├── model_registration.py       # Model registration
 ├── thangka_dataset.py          # Dataset loader
 ├── train_thangka_custom.py     # Training script
-├── inference.py                # Inference script
 ├── config.json                 # Model configuration
 ├── datasets/                   # Dataset splits and annotations
 └── README.md                   # Documentation
