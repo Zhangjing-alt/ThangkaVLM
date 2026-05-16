@@ -12,23 +12,12 @@ Official implementation of T-HVA and FFEM for reliable visual question answering
 
 * ✅ **Multi-task Support**: Visual question answering, element detection, and attribute recognition
 * ✅ **FFEM Enhancement**: Three-stage feature enhancement module (MSFR + SRE + SSAM)
-* ✅ **Automatic Data Augmentation**: Automatically generates additional QA pairs from annotations
 * ✅ **Flexible Training Strategies**: Supports partial freezing and full fine-tuning
 * ✅ **Complete Toolchain**: End-to-end pipeline including data organization, validation, training, and inference
 
 ---
 
 ## 📦 Quick Start
-
-### One-Click Run
-
-```bash
-# 1. Grant execution permission
-chmod +x quick_start.sh
-
-# 2. Run the script
-./quick_start.sh
-```
 
 Follow the prompts to complete:
 
@@ -46,24 +35,7 @@ Data organization → Validation → Training
 pip install torch transformers accelerate deepspeed Pillow tensorboard
 ```
 
-### 2. Organize Data
-
-```bash
-python convert_thangka_data.py \
-    --mode organize \
-    --source_dir ./raw_data \
-    --target_dir ./thangka_data
-```
-
-### 3. Validate Data
-
-```bash
-python convert_thangka_data.py \
-    --mode validate \
-    --data_dir ./thangka_data
-```
-
-### 4. Start Training
+### 2. Start Training
 
 ```bash
 python train_thangka_custom.py \
@@ -76,16 +48,6 @@ python train_thangka_custom.py \
     --learning_rate 2e-5 \
     --freeze_vision
 ```
-
-### 5. Test the Model
-
-```bash
-python inference.py \
-    --model_path ./output \
-    --mode chat \
-    --image test.jpg
-```
-
 ---
 
 ## 📁 Project Structure
@@ -145,84 +107,6 @@ thangka_data/
     ├── 003.json
     └── ...
 ```
-
----
-
-## 🎯 Training Strategies
-
-| Strategy         | GPU Memory | Training Time | Performance | Application         |
-| ---------------- | ---------- | ------------- | ----------- | ------------------- |
-| FFEM Only        | ~15GB      | Fast          | Good        | Quick verification  |
-| FFEM + LLM       | ~25GB      | Medium        | Very Good   | Recommended         |
-| Full Fine-tuning | ~40GB      | Slow          | Best        | Maximum performance |
-
----
-
-## 📈 Training Monitoring
-
-```bash
-tensorboard --logdir ./output/logs
-```
-
-Visit:
-
-```text
-http://localhost:6006
-```
-
-Monitor:
-
-* Training/validation loss
-* Learning rate schedule
-* Gradient distribution
-* Parameter updates
-
----
-
-## 🎨 Inference Examples
-
-### Single Image Inference
-
-```bash
-python inference.py \
-    --model_path ./output \
-    --mode single \
-    --image test.jpg \
-    --prompt "Describe this Thangka image"
-```
-
-### Interactive Chat
-
-```bash
-python inference.py \
-    --model_path ./output \
-    --mode chat \
-    --image test.jpg
-```
-
----
-
-## 🚀 Performance Optimization
-
-### GPU Memory Optimization
-
-```bash
---batch_size 1 --gradient_accumulation 16
-```
-
-### DeepSpeed Training
-
-```bash
-deepspeed --num_gpus=1 train_thangka_custom.py \
-    --deepspeed ds_z2_config.json
-```
-
-### Multi-GPU Training
-
-```bash
-deepspeed --num_gpus=2 train_thangka_custom.py
-```
-
 ---
 
 ## 📚 Core Functions
