@@ -1,0 +1,80 @@
+{
+    "instances": [
+        {
+            "image_id": "0024.jpg",
+            "is_mirrored": true,
+            "elements": [
+                {
+                    "label": "YellowJambhala",
+                    "name_zh": "黄财神",
+                    "role": "main_deity",
+                    "bbox": [ 1,332,1999,2546 ]
+                },
+                {
+                    "label": "Treasure-SpittingRat",
+                    "name_zh": "吐宝鼠",
+                    "role": "dharma_instrument",
+                    "hand_side": "left",
+                    "bbox": [ 1014,1754,1784,1995 ]
+                },
+                {
+                    "label": "BhraguRatna",
+                    "name_zh": "布拉噶如意宝",
+                    "role": "dharma_instrument",
+                    "hand_side": "right",
+                    "bbox": [ 0,1713,182,1941 ]
+                },
+                {
+                    "label": "ShankhaRatna",
+                    "name_zh": "海螺宝",
+                    "role": "dharma_instrument",
+                    "foot_side": "right",
+                    "bbox": [ 248,2430,747,2657 ]
+                },
+                {
+                    "label": "Mouth",
+                    "name_zh": "嘴",
+                    "role": "mouth",
+                    "bbox": [ 858,1095,1038,1183 ]
+                }
+            ],
+            "qa_pairs": [
+                {
+                    "question": "图片中心的人物是谁？",
+                    "answer": "黄财神",
+                    "question_type": "identification"
+                },
+                {
+                    "question": "主尊右手所持法器是什么？",
+                    "answer": "布拉噶如意宝",
+                    "question_type": "attribute"
+                },
+                {
+                    "question": "主尊左手所持法器是什么？",
+                    "answer": "吐宝鼠",
+                    "question_type": "attribute"
+                },
+                {
+                    "question": "主尊右脚所踩法器是什么？",
+                    "answer": "海螺宝",
+                    "question_type": "attribute"
+                },
+                {
+                    "question": "主尊是否坐在莲花座之上？",
+                    "answer": "否",
+                    "question_type": "attribute_existence"
+                },
+                {
+                    "question": "图中是否包含海螺宝？",
+                    "answer": "是",
+                    "question_type": "attribute_existence"
+                },
+                {
+                    "question": "图片中心的人物是否在吐舌头？",
+                    "answer": "否",
+                    "question_type": "hallucination_lips"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,96 @@
+{
+    "instances": [
+        {
+            "image_id": "004.jpg",
+            "is_mirrored": true,
+            "elements": [
+                {
+                    "label": "Padmasambhava",
+                    "name_zh": "莲花生",
+                    "role": "main_deity",
+                    "bbox": [ 82,140,430,502 ]
+                },
+                {
+                    "label": "LotusThrone",
+                    "name_zh": "莲花座",
+                    "role": "throne",
+                    "position": "under_main_deity",
+                    "bbox": [ 66,461,435,539 ]
+                },
+                {
+                    "label": "Vajra",
+                    "name_zh": "金刚杵",
+                    "role": "dharma_instrument",
+                    "hand_side": "right",
+                    "bbox": [ 99,348,127,389 ]
+                },
+                {
+                    "label": "Kapala",
+                    "name_zh": "嘎巴拉碗",
+                    "role": "dharma_instrument",
+                    "hand_side": "left",
+                    "bbox": [ 236,362,282,420 ]
+                },
+                {
+                    "label": "Khatvanga",
+                    "name_zh": "骷髅宝杖",
+                    "role": "dharma_instrument",
+                    "arm_side": "left",
+                    "bbox": [ 271,153,316,395 ]
+                }
+            ],
+            "qa_pairs": [
+                {
+                    "question": "图片中的人物是谁？",
+                    "answer": "莲花生",
+                    "question_type": "identification"
+                },
+                {
+                    "question": "主尊右手所持法器是什么？",
+                    "answer": "金刚杵",
+                    "question_type": "attribute"
+                },
+                {
+                    "question": "主尊左手所持法器是什么？",
+                    "answer": "嘎巴拉碗",
+                    "question_type": "attribute"
+                },
+                {
+                    "question": "主尊左臂夹着什么法器？",
+                    "answer": "骷髅宝杖",
+                    "question_type": "attribute"
+                },
+                {
+                    "question": "主尊坐在什么上？",
+                    "answer": "莲花座",
+                    "question_type": "attribute"
+                },
+                {
+                    "question": "主尊是否坐在莲花座上？",
+                    "answer": "是",
+                    "question_type": "attribute_existence"
+                },
+                {
+                    "question": "主尊左胳膊是否夹着骷髅宝杖？",
+                    "answer": "是",
+                    "question_type": "attribute_existence"
+                },
+                {
+                    "question": "主尊眉间是否有白毫相？",
+                    "answer": "否",
+                    "question_type": "attribute_existence"
+                },
+                {
+                    "question": "主尊额头是否有第三只眼睛？",
+                    "answer": "否",
+                    "question_type": "hallucination_forehead"
+                },
+                {
+                    "question": "图中是否包含金刚杵？",
+                    "answer": "是",
+                    "question_type": "hallucination_object"
+                }
+            ]
+        }
+    ]
+}

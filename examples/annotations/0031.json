@@ -1,0 +1,107 @@
+{
+    "instances": [
+        {
+            "image_id": "0031.jpg",
+            "is_mirrored": true,
+            "elements": [
+                {
+                    "label": "MedicineBuddha",
+                    "name_zh": "药师佛",
+                    "role": "main_deity",
+                    "bbox": [ 163,293,906,1096 ]
+                },
+                {
+                    "label": "Urnadha",
+                    "name_zh": "白毫相",
+                    "role": "forehead_dot",
+                    "bbox": [ 524,536,538,553 ]
+                },
+                {
+                    "label": "MedicineBowl",
+                    "name_zh": "药钵",
+                    "role": "dharma_instrument",
+                    "hand_side": "left",
+                    "bbox": [ 476,825,586,923 ]
+                },
+                {
+                    "label": "Haritaki",
+                    "name_zh": "藏青果",
+                    "role": "dharma_instrument",
+                    "hand_side": "right",
+                    "bbox": [ 253,889,367,1064 ]
+                },
+                {
+                    "label": "varada-mudra",
+                    "name_zh": "施予印",
+                    "role": "hand_gesture",
+                    "hand_side": "right",
+                    "bbox": [ 316,979,414,1080 ]
+                },
+                {
+                    "label": "LotusThrone",
+                    "name_zh": "莲花座",
+                    "role": "throne",
+                    "position": "under_main_deity",
+                    "bbox": [ 137,1009,926,1212 ]
+                }
+            ],
+            "qa_pairs": [
+                {
+                    "question": "图片中心的人物是谁？",
+                    "answer": "药师佛",
+                    "question_type": "identification"
+                },
+                {
+                    "question": "主尊右手所持法器是什么？",
+                    "answer": "藏青果",
+                    "question_type": "attribute"
+                },
+                {
+                    "question": "主尊左手所持法器是什么？",
+                    "answer": "药钵",
+                    "question_type": "attribute"
+                },
+                {
+                    "question": "主尊有什么手势？",
+                    "answer": "右手结施予印",
+                    "question_type": "attribute"
+                },
+                {
+                    "question": "主尊坐在什么之上？",
+                    "answer": "莲花座",
+                    "question_type": "attribute"
+                },
+                {
+                    "question": "主尊眉间是否有白毫相？",
+                    "answer": "是",
+                    "question_type": "attribute_existence"
+                },
+                {
+                    "question": "主尊是否坐在莲花座之上？",
+                    "answer": "是",
+                    "question_type": "attribute_existence"
+                },
+                {
+                    "question": "图中是否包含藏青果？",
+                    "answer": "是",
+                    "question_type": "attribute_existence"
+                },
+                {
+                    "question": "主尊额头是否有第三只眼睛？",
+                    "answer": "否",
+                    "question_type": "hallucination_forehead"
+                },
+                {
+                    "question": "图片中的主尊是否是不动如来？",
+                    "answer": "否",
+                    "question_type": "hallucination_object"
+                },
+                {
+                    "question": "主尊是否结禅定印？",
+                    "answer": "否",
+                    "question_type": "hallucination_object"
+                }
+            ]
+        }
+    ]
+}
