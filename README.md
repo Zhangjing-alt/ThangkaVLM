@@ -1,11 +1,11 @@
 # ThangkaVLM - Thangka Vision-Language Model
 
-Official implementation of T-HVA and FFEM for reliable visual question answering on structured cultural heritage images.
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20252014.svg)](https://doi.org/10.5281/zenodo.20252014)
 
-> ⚠️ **Important Notice**
-> The codes, datasets, and evaluation scripts in this repository are directly related to the manuscript currently submitted to **The Visual Computer**.
-> Readers and researchers using this repository are encouraged to cite the corresponding manuscript once published.
-
+> This repository contains the official code and data accompanying the manuscript  
+> **"Structure-Aware Fine-Grained Visual Enhancement for Reliable Visual Question Answering on Structured Cultural Heritage Images"**  
+> submitted to **The Visual Computer**.  
+> Please cite the paper when using this code.
 ---
 
 ## 🌟 Features
