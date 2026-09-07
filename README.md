@@ -81,10 +81,12 @@ ThangkaVLM/
 ├── assets/
 │   └── Figure2.png
 ├── examples/
+├── evaluation/
+│   └── evaluate_qwen3_ffem.py
 ├── config.json
-├── ffem.py
 ├── model_registration.py
 ├── modeling_qwen3_vl_ffem.py
+├── region_labels_utils.py
 ├── requirements.txt
 ├── thangka_dataset.py
 ├── train_thangka_custom.py
@@ -93,11 +95,12 @@ ThangkaVLM/
 
 ### Main Files
 
-- `ffem.py` — implementation of the Fine-Grained Feature Enhancement Module.
 - `modeling_qwen3_vl_ffem.py` — Qwen3-VL model implementation with FFEM integration.
-- `model_registration.py` — custom model registration.
+- `region_labels_utils.py` — utilities for mapping structured region annotations to visual-token regions.
+- `model_registration.py` — custom model registration for the FFEM-enhanced Qwen3-VL model.
 - `thangka_dataset.py` — dataset loading and preprocessing.
-- `train_thangka_custom.py` — training script.
+- `train_thangka_custom.py` — main training entry.
+- `evaluation/evaluate_qwen3_ffem.py` — evaluation entry for Qwen3-VL + LoRA + FFEM.
 - `config.json` — model configuration.
 - `examples/` — example resources.
 
@@ -118,7 +121,7 @@ cd ThangkaVLM
 pip install -r requirements.txt
 ```
 
-The main experiments are based on **Qwen3-VL-8B-Instruct**. Please prepare the pretrained model weights separately before training.
+The main experiments use **Qwen3-VL-8B-Instruct** as the pretrained vision-language backbone. Pretrained model weights should be prepared separately.
 
 ---
 
@@ -154,20 +157,20 @@ Example:
 }
 ```
 
-The structured bounding-box annotations can be mapped to the visual-token grid to construct region-level information used by RCE.
+Structured bounding-box annotations are mapped to the visual-token grid to construct the region-level information used by RCE.
 
 ---
 
 ## 🚀 Training
 
-Training is performed with **Qwen3-VL-8B-Instruct** and LoRA adaptation.
+The main experiments use **Qwen3-VL-8B-Instruct** with LoRA and FFEM.
 
-The main experimental configuration uses:
+The controlled training configuration is:
 
 ```text
-LoRA rank                = 16
-LoRA alpha               = 32
-LoRA dropout             = 0.05
+LoRA rank                 = 16
+LoRA alpha                = 32
+LoRA dropout              = 0.05
 
 Epochs                    = 10
 Micro batch size          = 2
@@ -179,6 +182,10 @@ FFEM learning rate        = 4e-4
 
 Maximum image side        = 448
 Precision                 = BF16
+Weight decay              = 0.01
+Warmup ratio              = 0.15
+LR scheduler              = cosine
+Maximum gradient norm     = 0.3
 ```
 
 The LoRA target modules are:
@@ -193,24 +200,67 @@ up_proj
 down_proj
 ```
 
-Use `train_thangka_custom.py` as the main training entry:
+Run the main training entry with:
 
 ```bash
 python train_thangka_custom.py \
     --model_path /path/to/Qwen3-VL-8B-Instruct \
     --data_dir /path/to/thangka_data \
-    --output_dir /path/to/output
+    --output_dir /path/to/output \
+    --tune lora_ffem \
+    --epochs 10 \
+    --batch_size 2 \
+    --gradient_accumulation 8 \
+    --learning_rate 2e-4 \
+    --lora_r 16 \
+    --lora_alpha 32 \
+    --lora_dropout 0.05 \
+    --image_max_side 448 \
+    --warmup_ratio 0.15 \
+    --weight_decay 0.01 \
+    --max_grad_norm 0.3 \
+    --lr_scheduler_type cosine \
+    --seed 42 \
+    --bf16
 ```
 
-Please adapt the paths and training arguments according to your local environment and the options provided by the training script.
+In the training script, `--learning_rate` specifies the LoRA learning rate, while FFEM parameters use twice this value. Therefore, `--learning_rate 2e-4` corresponds to a LoRA learning rate of `2e-4` and an FFEM learning rate of `4e-4`.
 
 ---
 
-## 🔬 Core Functions
+## 📏 Evaluation
+
+Evaluate a trained Qwen3-VL + LoRA + FFEM model with:
+
+```bash
+python evaluation/evaluate_qwen3_ffem.py \
+    --model_path /path/to/Qwen3-VL-8B-Instruct \
+    --adapter_path /path/to/lora_adapter \
+    --ffem_path /path/to/pytorch_model_pure_ffem.bin \
+    --test_dir /path/to/test_split \
+    --output_dir /path/to/results \
+    --image_max_side 448 \
+    --seed 42
+```
+
+The main evaluation reports:
+
+- **Standard Accuracy**
+- **Adversarial Accuracy**
+- **Overall Accuracy**
+- **Strict Hallucination Rate (Strict HR)**
+
+For binary existence questions, predicting that a visual element is present when the ground truth indicates its absence is counted as an existence hallucination. A recognition false negative affects answer accuracy but is not counted as an existence hallucination.
+
+The same evaluation protocol is applied to the LoRA baseline and the LoRA + FFEM model.
+
+---
+
+## 🔬 Core Components
 
 ### Multi-Scale Feature Reconstruction (MSFR)
 
-MSFR performs multi-scale transformations of visual-token features to strengthen the representation of local textures and fine-grained visual details.
+MSFR performs multi-scale transformations of visual-token features to strengthen local textures and fine-grained visual details.
 
 ### Region Context Enhancement (RCE)
 
@@ -222,30 +272,12 @@ SSAM models global semantic dependencies and spatial relationships among visual 
 
 ---
 
-## 📏 Evaluation
-
-The main evaluation reports:
-
-- **Standard Accuracy**
-- **Adversarial Accuracy**
-- **Overall Accuracy**
-- **Strict Hallucination Rate (Strict HR)**
-
-For binary existence questions, a prediction that asserts the presence of a visual element when the ground truth indicates its absence is counted as an existence hallucination.
-
-A recognition false negative affects answer accuracy but is not counted as an existence hallucination.
-
-The same evaluation protocol is applied to the LoRA baseline and the LoRA + FFEM model.
-
----
-
 ## ⚠️ Notes
 
 - Pretrained Qwen3-VL model weights are not included in this repository.
 - Dataset images and annotations should be used in accordance with their corresponding copyright and redistribution conditions.
-- Paths in the example commands should be adapted to your local environment.
-- The region annotations used by RCE are structured dataset annotations rather than model-generated grounding predictions.
-- The repository documentation will be updated together with subsequent manuscript revisions.
+- Paths in the example commands should be adapted to the local environment.
+- Region annotations used by RCE are structured dataset annotations rather than model-generated grounding predictions.
 
 ---
 
