@@ -2,171 +2,264 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20252014.svg)](https://doi.org/10.5281/zenodo.20252014)
 
-> This repository contains the official code and data accompanying the manuscript  
-> **"Structure-Aware Fine-Grained Visual Enhancement for Reliable Visual Question Answering on Structured Cultural Heritage Images"**  
-> submitted to **The Visual Computer**.  
-> Please cite the paper when using this code.
+Official implementation accompanying the manuscript:
+
+**"Hierarchical Visual Enhancement for Reliable Thangka Visual Question Answering"**
+
+Submitted to **The Visual Computer**.
+
+ThangkaVLM focuses on reliable visual question answering for highly structured Thangka images. The proposed **Thangka Hierarchical Visual Enhancement (T-HVE)** mechanism is implemented through a **Fine-Grained Feature Enhancement Module (FFEM)** to strengthen fine-grained visual representations and improve answer reliability.
+
 ---
 
 ## 🌟 Features
 
-* ✅ **Multi-task Support**: Visual question answering, element detection, and attribute recognition
-* ✅ **FFEM Enhancement**: Three-stage feature enhancement module (MSFR + SRE + SSAM)
-* ✅ **Flexible Training Strategies**: Supports partial freezing and full fine-tuning
-* ✅ **Complete Toolchain**: End-to-end pipeline including data organization, validation, training, and inference
+- **Thangka Visual Question Answering:** Visual question answering for highly structured Thangka images with dense iconographic details.
+- **T-HVE:** Thangka Hierarchical Visual Enhancement for progressively strengthening visual representations.
+- **FFEM:** Fine-Grained Feature Enhancement Module consisting of **MSFR**, **RCE**, and **SSAM**.
+- **Structured Region Information:** Region annotations are mapped to visual tokens to support regional context modeling.
+- **LoRA Training:** Parameter-efficient adaptation based on **Qwen3-VL-8B-Instruct**.
 
 ---
 
-## 📦 Quick Start
+## 🧩 Method Overview
 
-Follow the prompts to complete:
+The proposed **Thangka Hierarchical Visual Enhancement (T-HVE)** mechanism progressively enhances visual representations at three levels: local detail enhancement, regional context modeling, and global semantic-spatial enhancement.
 
-```text
-Data organization → Validation → Training
-```
+T-HVE is implemented through the proposed **Fine-Grained Feature Enhancement Module (FFEM)**.
+
+<p align="center">
+  <img src="assets/Figure2.png" width="95%" alt="Overview of T-HVE and FFEM">
+</p>
+
+<p align="center">
+  <b>Figure 2.</b> Overview of the proposed T-HVE framework and the implementation of FFEM.
+</p>
+
+FFEM consists of three components:
+
+- **MSFR — Multi-Scale Feature Reconstruction:** enhances local fine-grained visual features through multi-scale feature transformations.
+- **RCE — Region Context Enhancement:** aggregates visual information within annotated structural regions to construct region-level contextual representations.
+- **SSAM — Semantic-Spatial Attention Mixing:** models semantic dependencies and spatial relationships among visual tokens.
 
 ---
 
-## 🔧 Manual Setup
+## 📊 Main Results
 
-### 1. Install Dependencies
+We evaluate the proposed method on the **Thangka-VQA** test set using **Qwen3-VL-8B-Instruct** as the main vision-language backbone.
 
-```bash
-pip install torch transformers accelerate deepspeed Pillow tensorboard
-```
+| Method | Standard Acc. | Adversarial Acc. | Overall Acc. | Strict HR |
+|---|---:|---:|---:|---:|
+| Qwen3-VL-8B + LoRA | 98.55% | 86.93% | 92.28% | 4.96% |
+| Qwen3-VL-8B + LoRA + FFEM | **99.79%** | **91.70%** | **95.42%** | **4.10%** |
 
-### 2. Start Training
+FFEM improves the overall accuracy from **92.28% to 95.42%** while reducing the strict hallucination rate from **4.96% to 4.10%**.
 
-```bash
-python train_thangka_custom.py \
-    --model_path ./ThangkaVLM \
-    --data_dir ./thangka_data \
-    --output_dir ./output \
-    --task_mode mixed \
-    --epochs 3 \
-    --batch_size 2 \
-    --learning_rate 2e-5 \
-    --freeze_vision
-```
+---
+
+## 📚 Thangka-VQA Dataset
+
+Thangka-VQA is a visual question answering dataset constructed for highly structured Thangka images.
+
+The dataset contains **1,028 images** and **10,024 question-answer pairs**.
+
+| Split | Images | QA Pairs |
+|---|---:|---:|
+| Train | 820 | 8,003 |
+| Validation | 100 | 972 |
+| Test | 108 | 1,049 |
+| **Total** | **1,028** | **10,024** |
+
+The dataset contains both standard and adversarial questions and includes structured region annotations for fine-grained visual modeling.
+
 ---
 
 ## 📁 Project Structure
 
 ```text
 ThangkaVLM/
-├── ffem.py                      # FFEM module implementation
-├── modeling_qwen3_vl_ffem.py   # Customized model class
-├── model_registration.py       # Model registration
-├── thangka_dataset.py          # Dataset loader
-├── train_thangka_custom.py     # Training script
-├── config.json                 # Model configuration
-├── datasets/                   # Dataset splits and annotations
-└── README.md                   # Documentation
+├── assets/
+│   └── Figure2.png
+├── examples/
+├── config.json
+├── ffem.py
+├── model_registration.py
+├── modeling_qwen3_vl_ffem.py
+├── requirements.txt
+├── thangka_dataset.py
+├── train_thangka_custom.py
+└── README.md
 ```
+
+### Main Files
+
+- `ffem.py` — implementation of the Fine-Grained Feature Enhancement Module.
+- `modeling_qwen3_vl_ffem.py` — Qwen3-VL model implementation with FFEM integration.
+- `model_registration.py` — custom model registration.
+- `thangka_dataset.py` — dataset loading and preprocessing.
+- `train_thangka_custom.py` — training script.
+- `config.json` — model configuration.
+- `examples/` — example resources.
+
+---
+
+## 📦 Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Zhangjing-alt/ThangkaVLM.git
+cd ThangkaVLM
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+The main experiments are based on **Qwen3-VL-8B-Instruct**. Please prepare the pretrained model weights separately before training.
 
 ---
 
 ## 📊 Data Format
 
-Example JSON annotation format:
+The dataset uses structured annotations containing image information, element-level annotations, bounding boxes, and question-answer pairs.
+
+Example:
 
 ```json
 {
-    "instances": [
+  "instances": [
+    {
+      "image_id": "003.jpg",
+      "is_mirrored": true,
+      "elements": [
         {
-            "image_id": "003.jpg",
-            "is_mirrored": true,
-            "elements": [
-                {
-                    "label": "YellowJambhala",
-                    "name_zh": "Yellow Jambhala",
-                    "role": "main_deity",
-                    "bbox": [232, 223, 1398, 1631]
-                }
-            ],
-            "qa_pairs": [
-                {
-                    "question": "Who is the figure at the center of the image?",
-                    "answer": "Yellow Jambhala",
-                    "question_type": "identification"
-                }
-            ]
+          "label": "YellowJambhala",
+          "name_zh": "Yellow Jambhala",
+          "role": "main_deity",
+          "bbox": [232, 223, 1398, 1631]
         }
-    ]
+      ],
+      "qa_pairs": [
+        {
+          "question": "Who is the figure at the center of the image?",
+          "answer": "Yellow Jambhala",
+          "question_type": "identification"
+        }
+      ]
+    }
+  ]
 }
 ```
 
-Dataset directory structure:
+The structured bounding-box annotations can be mapped to the visual-token grid to construct region-level information used by RCE.
 
-```text
-thangka_data/
-├── images/
-│   ├── 003.jpg
-│   └── ...
-└── annotations/
-    ├── 003.json
-    └── ...
-```
 ---
 
-## 📚 Core Functions
+## 🚀 Training
 
-### Automatic Data Augmentation
+Training is performed with **Qwen3-VL-8B-Instruct** and LoRA adaptation.
 
-Automatically generates QA pairs from element annotations:
+The main experimental configuration uses:
 
-* Existence questions
-* Identification questions
-* Attribute questions
-* Location questions
+```text
+LoRA rank                = 16
+LoRA alpha               = 32
+LoRA dropout             = 0.05
 
-### Multi-task Learning
+Epochs                    = 10
+Micro batch size          = 2
+Gradient accumulation     = 8
+Effective batch size      = 16
 
-* Visual Question Answering
-* Element Detection
-* Mixed-task Training
+LoRA learning rate        = 2e-4
+FFEM learning rate        = 4e-4
 
-### FFEM Enhancement
+Maximum image side        = 448
+Precision                 = BF16
+```
 
-* MSFR: Multi-scale Feature Reconstruction
-* SRE: Salient Region Enhancement
-* SSAM: Spatial Semantic Alignment Mixing
+The LoRA target modules are:
+
+```text
+q_proj
+k_proj
+v_proj
+o_proj
+gate_proj
+up_proj
+down_proj
+```
+
+Use `train_thangka_custom.py` as the main training entry:
+
+```bash
+python train_thangka_custom.py \
+    --model_path /path/to/Qwen3-VL-8B-Instruct \
+    --data_dir /path/to/thangka_data \
+    --output_dir /path/to/output
+```
+
+Please adapt the paths and training arguments according to your local environment and the options provided by the training script.
+
+---
+
+## 🔬 Core Functions
+
+### Multi-Scale Feature Reconstruction (MSFR)
+
+MSFR performs multi-scale transformations of visual-token features to strengthen the representation of local textures and fine-grained visual details.
+
+### Region Context Enhancement (RCE)
+
+RCE uses structured region information to construct region-level contextual representations. Visual tokens belonging to the same annotated region are aggregated so that regional structural information can be incorporated into visual feature enhancement.
+
+### Semantic-Spatial Attention Mixing (SSAM)
+
+SSAM models global semantic dependencies and spatial relationships among visual tokens and integrates them with the preceding fine-grained and regional representations.
+
+---
+
+## 📏 Evaluation
+
+The main evaluation reports:
+
+- **Standard Accuracy**
+- **Adversarial Accuracy**
+- **Overall Accuracy**
+- **Strict Hallucination Rate (Strict HR)**
+
+For binary existence questions, a prediction that asserts the presence of a visual element when the ground truth indicates its absence is counted as an existence hallucination.
+
+A recognition false negative affects answer accuracy but is not counted as an existence hallucination.
+
+The same evaluation protocol is applied to the LoRA baseline and the LoRA + FFEM model.
 
 ---
 
 ## ⚠️ Notes
 
-* Large pretrained model weights are not included in this repository.
-* Some image files may not be publicly released due to copyright restrictions.
-* Dataset annotations and evaluation scripts are provided for reproducibility.
+- Pretrained Qwen3-VL model weights are not included in this repository.
+- Dataset images and annotations should be used in accordance with their corresponding copyright and redistribution conditions.
+- Paths in the example commands should be adapted to your local environment.
+- The region annotations used by RCE are structured dataset annotations rather than model-generated grounding predictions.
+- The repository documentation will be updated together with subsequent manuscript revisions.
 
 ---
 
 ## 📖 Citation
 
-If you find this repository useful, please consider citing the related manuscript submitted to **The Visual Computer**.
+If you find this work useful, please consider citing our manuscript:
 
 ```bibtex
-@article{thangkavlm2025,
-  title={Structure-Aware Fine-Grained Visual Enhancement for Reliable Visual Question Answering on Structured Cultural Heritage Images},
+@article{thangkavlm2026,
+  title={Hierarchical Visual Enhancement for Reliable Thangka Visual Question Answering},
   author={Anonymous},
-  journal={The Visual Computer},
-  year={2025}
+  note={Manuscript submitted to The Visual Computer},
+  year={2026}
 }
 ```
 
----
-
-## 🤝 Contribution
-
-Issues and Pull Requests are welcome.
-
----
-
-## 📄 License
-
-MIT License
-
----
-
-**Start your ThangkaVLM journey today!** 🎨✨
+Citation information will be updated after publication.
